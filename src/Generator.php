@@ -4,9 +4,9 @@
 namespace Daalvand\CsvGenerator;
 
 
-use App\Services\CsvGenerator\Exceptions\CsvGeneratorException;
+use Daalvand\CsvGenerator\Exceptions\CsvGeneratorException;
 
-class Service implements ServiceInterface
+class Generator implements GeneratorInterface
 {
     /**
      * @var false|resource
@@ -24,24 +24,12 @@ class Service implements ServiceInterface
     /** Definition of the BOMs for the different encodings */
     const BOM_UTF8     = "\xEF\xBB\xBF";
 
-    /**
-     * Set if a BOM has to be added to the file
-     *
-     * @param bool $shouldAddBOM
-     * @return $this
-     */
-    public function setShouldAddBOM(bool $shouldAddBOM):ServiceInterface
+    public function setShouldAddBOM(bool $shouldAddBOM):GeneratorInterface
     {
         $this->shouldAddBOM = $shouldAddBOM;
         return $this;
     }
 
-    /**
-     * Sets the field enclosure for the CSV
-     *
-     * @param string $enclosure Character that enclose fields (one character only)
-     * @return $this
-     */
     public function setEnclosure(string $enclosure)
     {
         $this->enclosure =  $enclosure;
@@ -49,12 +37,6 @@ class Service implements ServiceInterface
     }
 
 
-    /**
-     * Sets the field delimiter for the CSV
-     *
-     * @param string $delimiter Character that delimits fields (one character only)
-     * @return $this
-     */
     public function setDelimiter($delimiter)
     {
         $this->delimiter = $delimiter;
@@ -62,43 +44,26 @@ class Service implements ServiceInterface
         return $this;
     }
 
-    /**
-     * @param string $name
-     * @return $this
-     */
-    public function setFileName(string $name):ServiceInterface
+    public function setFileName(string $name):GeneratorInterface
     {
         $this->fileName = $name;
         return $this;
     }
 
-    /**
-     * @param string $path
-     * @return Service
-     */
-    public function setFilePath(string $path)
+    public function setFilePath(string $path):GeneratorInterface
     {
         $this->filePath = $path;
         return $this;
     }
 
 
-    /**
-     * @param bool $append
-     * @return Service
-     */
-    public function shouldAppend(bool $append)
+    public function shouldAppend(bool $append):GeneratorInterface
     {
         $this->append = $append;
         return $this;
     }
 
-    /**
-     * Opens the CSV streamer and makes it ready to accept data.
-     * @return $this
-     * @throws CsvGeneratorException
-     */
-    public function openGenerator():ServiceInterface
+    public function openGenerator():GeneratorInterface
     {
         if(empty($this->mapper->getHeaders()) || empty($this->filePath) || empty($this->fileName)){
             throw new CsvGeneratorException();
@@ -118,11 +83,6 @@ class Service implements ServiceInterface
         return $this;
     }
 
-    /**
-     * assoc array contains field names -> ['id'=> 1, 'name' => 'ali', 'job' => ['id' => 1, 'name' => 'developer']]
-     * @param array $row
-     * @return $this
-     */
     public function addRow(array $row)
     {
 
@@ -140,11 +100,7 @@ class Service implements ServiceInterface
         fputcsv($this->file, $row, $this->delimiter, $this->enclosure);
     }
 
-    /**
-     * @return $this
-     * @throws CsvGeneratorException
-     */
-    public function close():ServiceInterface
+    public function close():GeneratorInterface
     {
         if(!fclose($this->file)){
             throw new CsvGeneratorException();
@@ -152,20 +108,13 @@ class Service implements ServiceInterface
         return $this;
     }
 
-    /**
-     * @param Mapper $mapper
-     * @return $this
-     */
-    public function setMapper(Mapper $mapper): ServiceInterface
+    public function setMapper(Mapper $mapper): GeneratorInterface
     {
         $this->mapper = $mapper;
         return $this;
     }
 
 
-    /**
-     * @inheritDoc
-     */
     public function getMapper(): Mapper
     {
         return $this->mapper;
