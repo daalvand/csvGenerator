@@ -1,0 +1,36 @@
+{
+  "name": "daalvand/csv-generator",
+  "description": "A PHP package for generate csv from any type of array",
+  "keywords": [
+    "csv", "nested array", "csv-generator", "csv nested array", "php csv"
+  ],
+  "homepage": "https://github.com/daalvand/gsvGenerator",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Mehdi Daalvand",
+      "email": "mdaalvand@gmail.com"
+    }
+  ],
+  "require": {
+    "php" : "7.1.*",
+    "ext-mbstring": "*"
+  },
+  "require-dev": {
+  },
+  "autoload": {
+    "psr-4": {
+      "Daalvand\\CsvGenerator\\": "src"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Daalvand\\CsvGenerator\\Test\\": "tests"
+    }
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-master": "1.0-dev"
+    }
+  }
+}
